@@ -23,6 +23,10 @@ To run this demo you have to create the image of the fluentd shipper in the mini
 ```
 cd fluentd_image
 make build
+cd ../es-image
+make build
+cd ../kibana-image
+make build
 ```
 
 To setup the Elasticsearch Cluster and a kibana frontend run:
