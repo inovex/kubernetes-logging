@@ -13,44 +13,30 @@
 # limitations under the License.
 
 # This Dockerfile will build an image that is configured
-# to use Fluentd to collect all Docker container log files
-# and then cause them to be ingested using the Google Cloud
-# Logging API. This configuration assumes that the host performning
-# the collection is a VM that has been created with a logging.write
-# scope and that the Logging API has been enabled for the project
-# in the Google Developer Console.
+# to run Fluentd with an Elasticsearch plug-in and the
+# provided configuration file.
+# TODO(a-robinson): Use a lighter base image, e.g. some form of busybox.
+# The image acts as an executable for the binary /usr/sbin/td-agent.
+# Note that fluentd is run with root permssion to allow access to
+# log files with root only access under /var/log/containers/*
+# Please see http://docs.fluentd.org/articles/install-by-deb for more
+# information about installing fluentd using deb package.
 
 FROM gcr.io/google_containers/ubuntu-slim:0.4
 MAINTAINER Alex Robinson "arob@google.com"
+MAINTAINER Jimmi Dyson "jimmidyson@gmail.com"
+
+# Ensure there are enough file descriptors for running Fluentd.
+RUN ulimit -n 65536
 
 # Disable prompts from apt.
 ENV DEBIAN_FRONTEND noninteractive
-# Keeps unneeded configs from being installed along with fluentd.
-ENV DO_NOT_INSTALL_CATCH_ALL_CONFIG true
 
-RUN apt-get -q update && \
-    apt-get install -y curl ca-certificates gcc make bash && \
-    apt-get install -y --reinstall lsb-base lsb-release && \
-    echo "Installing logging agent" && \
-    curl -sSL https://dl.google.com/cloudagents/install-logging-agent.sh | bash && \
-    /usr/sbin/google-fluentd-gem install fluent-plugin-record-reformer -v 0.8.1  && \
-    /usr/sbin/google-fluentd-gem install fluent-plugin-systemd -v 0.0.3 && \
-    apt-get remove -y gcc make && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    /opt/google-fluentd/embedded/share/doc \
-    /opt/google-fluentd/embedded/share/gtk-doc \
-    /opt/google-fluentd/embedded/lib/postgresql \
-    /opt/google-fluentd/embedded/bin/postgres \
-    /opt/google-fluentd/embedded/share/postgresql \
-    /var/log/google-fluentd
+# Copy the Fluentd configuration file.
+COPY td-agent.conf /etc/td-agent/td-agent.conf
 
-# Copy the Fluentd configuration files for logging Docker container logs.
-# Either configuration file can be used by specifying `-c <file>` as a command
-# line argument.
-COPY google-fluentd.conf /etc/google-fluentd/google-fluentd.conf
-COPY google-fluentd-journal.conf /etc/google-fluentd/google-fluentd-journal.conf
+COPY build.sh /tmp/build.sh
+RUN /tmp/build.sh
 
-# Start Fluentd to pick up our config that watches Docker container logs.
-CMD /usr/sbin/google-fluentd "$FLUENTD_ARGS"
+# Run the Fluentd service.
+ENTRYPOINT ["td-agent"]
