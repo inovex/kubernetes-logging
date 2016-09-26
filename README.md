@@ -9,7 +9,6 @@ The `fluentd_image/Makefile` builds the docker container. Change the variables a
 
 The file `kubernetes_config/fluentd_config/td-agent.conf` contains the fluentd config. You might change it to consume also journald logs or further logs of the kubelet.
 
-
 ## Demo
 
 The demo relies on minikube. You have to setup minikube and then run:
