@@ -35,6 +35,8 @@ spec:
         - name: minikubemount
           mountPath: /mnt/sda1/var/lib/docker/containers
           readOnly: true
+        - name: config-volume
+          mountPath: /etc/td-agent
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
@@ -49,3 +51,6 @@ spec:
       - name: minikubemount
         hostPath: 
           path: /mnt/sda1/var/lib/docker/containers
+      - name: config-volume
+        configMap:
+          name: fluentd-config

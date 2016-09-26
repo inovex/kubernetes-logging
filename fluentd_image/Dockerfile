@@ -32,13 +32,13 @@ RUN ulimit -n 65536
 # Disable prompts from apt.
 ENV DEBIAN_FRONTEND noninteractive
 
-# Copy the Fluentd configuration file.
-COPY td-agent.conf /etc/td-agent/td-agent.conf
-
 COPY build.sh /tmp/build.sh
 RUN /tmp/build.sh
+
 # Create directory to store fluentd pos files.
 RUN mkdir -p /var/lib/fluentd
+
+# Add Entrypoint.
 ADD entry-point.sh /
 RUN chmod +x /entry-point.sh
 

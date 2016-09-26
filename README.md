@@ -18,11 +18,11 @@ make build
 
 To setup the Elasticsearch Cluster and a kibana frontend run:
 ```
-cd kubernetes_config
-kubectl create -f es-controller.yaml
-kubectl create -f kibana-controller.yaml
-kubectl create -f es-service.yaml
-kubectl create -f kibana-service.yaml
+kubectl create -f kubernetes_config/es-controller.yaml
+kubectl create -f kubernetes_config/kibana-controller.yaml
+kubectl create -f kubernetes_config/es-service.yaml
+kubectl create -f kubernetes_config/kibana-service.yaml
+
 ```
 
 You can get the URL to the kibana dashboard via:
@@ -32,6 +32,6 @@ minikube service -n kube-system --url kibana-logging
 
 To start the fluentd daemonset run:
 ```
-cd kubernetes_config
-kubectl create -f fluentd-daemonset.yaml
+kubectl create configmap fluentd-config --from-file=kubernetes_config/fluentd_config/td-agent.conf --namespace=kube-system
+kubectl create -f kubernetes_config/fluentd-daemonset.yaml
 ```
