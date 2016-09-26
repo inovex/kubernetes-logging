@@ -3,6 +3,7 @@ node.master: ${NODE_MASTER}
 node.data: ${NODE_DATA}
 transport.tcp.port: ${TRANSPORT_PORT}
 http.port: ${HTTP_PORT}
+network.host: 0.0.0.0
 discovery.zen.ping.multicast.enabled: false
 discovery.zen.minimum_master_nodes: 2
 path.data: /data
