@@ -20,7 +20,7 @@ REGISTRY = local
 IMAGE = elasticsearch
 TAG = 2.4.0
 
-build:	elasticsearch_logging_discovery
+build:	
 	docker build --build-arg ELASTICSEARCH_VERSION=$(TAG) -t $(REGISTRY)/$(IMAGE):$(TAG) .
 
 push:
