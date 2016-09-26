@@ -3,32 +3,35 @@
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
-  name: filebeat-logging
+  name: fluentd-logging
   namespace: kube-system
   labels:
-    k8s-app: filebeat-logging
+    k8s-app: fluentd-logging
     version: v1
     #kubernetes.io/cluster-service: "true"
 spec:
   template:
     metadata:
-      name: filebeat-logging
+      name: fluentd-logging
       namespace: kube-system
       labels:
-        k8s-app: filebeat-logging
+        k8s-app: fluentd-logging
     spec:
       dnsPolicy: Default
       containers:
-      - name: filebeat-logging
-        image: exabeat
+      - name: fluentd-logging
+        # For Production use replace image name by an image in your private registry and set imagePullPolicy to reasonable value.
+        image: kubernetes-logging:1.19
         imagePullPolicy: Never
         volumeMounts:
         - name: varlog
           mountPath: /var/log/
           readOnly: true
         - name: varlibdockercontainers
-          mountPath: /var/lib/docker/containers
+          mountPath: /var/log/containers
           readOnly: true
+        - name: fluentdposfiles
+          mountPath: /var/lib/fluentd
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
@@ -37,3 +40,6 @@ spec:
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
+      - name: fluentdposfiles
+        hostPath:
+          path: /tmp/fluentd

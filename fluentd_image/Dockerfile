@@ -37,6 +37,10 @@ COPY td-agent.conf /etc/td-agent/td-agent.conf
 
 COPY build.sh /tmp/build.sh
 RUN /tmp/build.sh
+# Create directory to store fluentd pos files.
+RUN mkdir -p /var/lib/fluentd
+ADD entry-point.sh /
+RUN chmod +x /entry-point.sh
 
 # Run the Fluentd service.
-ENTRYPOINT ["td-agent"]
+ENTRYPOINT ["/entry-point.sh"]
