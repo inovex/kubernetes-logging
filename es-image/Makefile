@@ -16,15 +16,18 @@
 
 # The current value of the tag to be used for building and
 # pushing an image to gcr.io
-TAG = 1.9
+REGISTRY = local
+IMAGE = elasticsearch
+TAG = 2.4.0
 
 build:	elasticsearch_logging_discovery
-	docker build -t gcr.io/google_containers/elasticsearch:$(TAG) .
+	docker build --build-arg ELASTICSEARCH_VERSION=$(TAG) -t $(REGISTRY)/$(IMAGE):$(TAG) .
 
 push:
-	gcloud docker push gcr.io/google_containers/elasticsearch:$(TAG)
+	docker push $(REGISTRY)/$(IMAGE):$(TAG)
 
 elasticsearch_logging_discovery:
+	go get
 	go build elasticsearch_logging_discovery.go
 
 clean:

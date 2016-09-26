@@ -16,26 +16,34 @@
 # to work with Kubernetes logging. Inspired by the Dockerfile
 # dockerfile/elasticsearch
 
-FROM java:openjdk-7-jre
+FROM java:openjdk-8-jre
 MAINTAINER Satnam Singh "satnam@google.com"
-
 ENV DEBIAN_FRONTEND noninteractive
+ARG ELASTICSEARCH_VERSION
+
+RUN useradd elasticsearch 
 
 RUN apt-get update && \
     apt-get install -y curl && \
     apt-get clean
 
+RUN echo $ELASTICSEARCH_VERSION
+
 RUN cd / && \
-    curl -O https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.5.2.tar.gz && \
-    tar xf elasticsearch-1.5.2.tar.gz && \
-    rm elasticsearch-1.5.2.tar.gz
+    curl -OL https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz && \
+    tar xf elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz && \
+    rm elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz && \
+    mv /elasticsearch-${ELASTICSEARCH_VERSION} /elasticsearch
 
-RUN mkdir -p /elasticsearch-1.5.2/config/templates
+RUN mkdir -p /elasticsearch/config/templates
 
-COPY elasticsearch.yml /elasticsearch-1.5.2/config/elasticsearch.yml
-COPY template-k8s-logstash.json /elasticsearch-1.5.2/config/templates/template-k8s-logstash.json
+COPY elasticsearch.yml /elasticsearch/config/elasticsearch.yml
+COPY template-k8s-logstash.json /elasticsearch/config/templates/template-k8s-logstash.json
 COPY run.sh /
 COPY elasticsearch_logging_discovery /
+
+RUN mkdir -p /data && chown -R elasticsearch:elasticsearch /data && chown -R elasticsearch:elasticsearch /elasticsearch
+USER elasticsearch
 
 VOLUME ["/data"]
 EXPOSE 9200 9300

@@ -16,7 +16,7 @@
 
 export NODE_MASTER=${NODE_MASTER:-true}
 export NODE_DATA=${NODE_DATA:-true}
-/elasticsearch_logging_discovery >> /elasticsearch-1.5.2/config/elasticsearch.yml
+/elasticsearch_logging_discovery >> /elasticsearch/config/elasticsearch.yml
 export HTTP_PORT=${HTTP_PORT:-9200}
 export TRANSPORT_PORT=${TRANSPORT_PORT:-9300}
-/elasticsearch-1.5.2/bin/elasticsearch
+/elasticsearch/bin/elasticsearch
