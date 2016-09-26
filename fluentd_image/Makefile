@@ -14,11 +14,14 @@
 
 .PHONY:	build push
 
-IMAGE = fluentd-elasticsearch
+# Change these values according to your private or public registry setup.
+REGISTRY = local
+IMAGE = kubernetes-logging
 TAG = 1.19
 
 build:	
-	docker build -t kubernetes-logging:$(TAG) .
+	docker build -t $(REGISTRY)/$(IMAGE):$(TAG) -t $(REGISTRY)/$(IMAGE):latest  .
 
 push:	
-	gcloud docker --server=gcr.io push gcr.io/google_containers/$(IMAGE):$(TAG)
+	docker push $(REGISTRY)/$(IMAGE):$(TAG)
+	docker push $(REGISTRY)/$(IMAGE):latest

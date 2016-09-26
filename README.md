@@ -1,5 +1,15 @@
 # Kubernetes Logging into Elasticsearch
 
+This repository contains a docker images for a fluentd logshipper, kubernetes configs to deploy a basic elasticsearch cluster with kibana frontend, and documentation. These files should show how to setup a fluentd logshipper as kubernetes daemonset and pipe all container logs into an elasticsearch cluster. The logs are enriched with Metadata like `pod_name`, `pod_id`, `docker_id`. If your kubernetes application logs structured JSON log to STDOUT or STDERR the JSON is interpreted and each field of the JSON is a field in the elasticsearch index.
+
+## Changes need for production
+The file `kubernetes_config/fluentd-daemonset.yaml` contains the configuration for the fluentd logshipper. See the comments in this files for changes in production.
+
+The `fluentd_image/Makefile` builds the docker container. Change the variables according to your docker registry setup. 
+
+The file `kubernetes_config/fluentd_config/td-agent.conf` contains the fluentd config. You might change it to consume also journald logs or further logs of the kubelet.
+
+
 ## Demo
 
 The demo relies on minikube. You have to setup minikube and then run:

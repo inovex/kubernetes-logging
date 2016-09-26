@@ -13,6 +13,7 @@ spec:
   template:
     metadata:
       name: fluentd-logging
+      # If you want different namespace replace it. 
       namespace: kube-system
       labels:
         k8s-app: fluentd-logging
@@ -21,8 +22,12 @@ spec:
       containers:
       - name: fluentd-logging
         # For Production use replace image name by an image in your private registry and set imagePullPolicy to reasonable value.
-        image: kubernetes-logging:1.19
+        image: local/kubernetes-logging:1.19
         imagePullPolicy: Never
+        # Change for production use. Use the environment variable to the URL of your production host.
+        #env:
+        #  - name: "ELASTICSEARCH_LOGGING_SERVICE_HOST"
+        #    value: "http://elasticsearch-logging:9200"
         volumeMounts:
         - name: varlog
           mountPath: /var/log/
@@ -32,6 +37,9 @@ spec:
           readOnly: true
         - name: fluentdposfiles
           mountPath: /var/lib/fluentd
+        # This mount is minikube specific since /var/log/containers/*.log are symlinks into this mount. 
+        # Probably you will not need it in produktion. Maybe you have to replace it by a mount of /var/lib/docker/containers since normal kubernetes
+        # symlinks into that directory.
         - name: minikubemount
           mountPath: /mnt/sda1/var/lib/docker/containers
           readOnly: true
