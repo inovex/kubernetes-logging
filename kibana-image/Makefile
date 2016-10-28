@@ -12,12 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.PHONY:	build push
+.PHONY:	kibana build push
 
 TAG = 4.6.1
 
 build:
-	docker build -t --build-arg KIBANA_VERSION=$(TAG) kibana:$(TAG) kibana:latest.
+	docker build --build-arg KIBANA_VERSION=$(TAG) -t kibana:$(TAG) .
 
 push:
 	docker push local/kibana:$(TAG)
+
+clean:
+	rm kibana
+
