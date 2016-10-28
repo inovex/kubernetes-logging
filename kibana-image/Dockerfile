@@ -17,6 +17,7 @@
 
 FROM java:openjdk-8-jre
 MAINTAINER Satnam Singh "satnam@google.com"
+ARG KIBANA_VERSION
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -25,9 +26,10 @@ RUN apt-get update && \
     apt-get clean
 
 RUN cd / && \
-    curl -O https://download.elastic.co/kibana/kibana/kibana-4.6.1-linux-x86_64.tar.gz && \
-    tar xf kibana-4.6.1-linux-x86_64.tar.gz && \
-    rm kibana-4.6.1-linux-x86_64.tar.gz
+    curl -O https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz && \
+    tar xf kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz && \
+    rm kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz && \
+    mv /kibana-${KIBANA_VERSION}-linux-x86_64 /kibana
 
 COPY run.sh /run.sh
 

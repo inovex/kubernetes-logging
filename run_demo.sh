@@ -25,4 +25,4 @@ kubectl create -f kubernetes_config/fluentd-daemonset.yaml
 
 kubectl --namespace=kube-system get pods
 
-minikube service -n kube-system --url kibana-logging
+minikube service -n kube-system kibana-logging

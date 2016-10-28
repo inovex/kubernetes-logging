@@ -17,7 +17,7 @@
 TAG = 4.6.1
 
 build:
-	docker build -t kibana:$(TAG) .
+	docker build -t --build-arg KIBANA_VERSION=$(TAG) kibana:$(TAG) kibana:latest.
 
 push:
 	docker push local/kibana:$(TAG)
