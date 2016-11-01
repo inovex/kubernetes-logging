@@ -13,4 +13,6 @@ cd ../es-image
 make build
 cd ../kibana-image
 make build
+cd ../example_app
+make build 
 cd ..

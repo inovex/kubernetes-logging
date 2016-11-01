@@ -13,7 +13,10 @@ cd ../es-image
 make build
 cd ../kibana-image
 make build
+cd ../example_app
+make build 
 cd ..
+
 
 kubectl create -f kubernetes_config/es-controller.yaml
 kubectl create -f kubernetes_config/kibana-controller.yaml
@@ -22,6 +25,8 @@ kubectl create -f kubernetes_config/kibana-service.yaml
 
 kubectl create configmap fluentd-config --from-file=kubernetes_config/fluentd_config/td-agent.conf --namespace=kube-system
 kubectl create -f kubernetes_config/fluentd-daemonset.yaml
+kubectl create -f kubernetes_config/structured_logger.yaml
+kubectl create -f kubernetes_config/normal_logger.yaml
 
 kubectl --namespace=kube-system get pods
 

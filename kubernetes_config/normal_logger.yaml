@@ -1,0 +1,30 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: normal-logging
+spec:
+  revisionHistoryLimit: 3
+  replicas: 3
+  selector:
+    matchLabels:
+      app: normal-logging
+      logformat: plaintext
+  template:
+    metadata:
+      labels:
+        app: normal-logging
+        logformat: plaintext
+    spec:
+      containers:
+      - name: logging-app
+        image: local/loggingapp:0.1
+        imagePullPolicy: Never
+        args:
+          - app
+        resources:
+          # need more cpu upon initialization, therefore burstable class
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 100m
