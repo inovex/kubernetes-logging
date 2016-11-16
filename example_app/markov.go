@@ -134,7 +134,7 @@ func main() {
 	c.Build(strings.NewReader(INPUT)) // Build chains from standard input.
 	for {
 		text := c.Generate(*numWords) // Generate text.
-		logrus.WithField("words", *numWords).WithField("prefix", *prefixLen).Info(text)
+		logrus.WithField("words", *numWords).WithField("prefix", *prefixLen).WithField("Textlen", len(text)).Info(text)
 		time.Sleep(10 * time.Second)
 	}
 
