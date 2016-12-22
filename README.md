@@ -2,6 +2,8 @@
 
 This repository contains a docker images for a fluentd logshipper, kubernetes configs to deploy a basic elasticsearch cluster with kibana frontend, and documentation. These files should show how to setup a fluentd logshipper as kubernetes daemonset and pipe all container logs into an elasticsearch cluster. The logs are enriched with Metadata like `pod_name`, `pod_id`, `docker_id`. If your kubernetes application logs structured JSON log to STDOUT or STDERR the JSON is interpreted and each field of the JSON is a field in the elasticsearch index.
 
+The content of this repository is based on the example given in the kubernetes repository. https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch
+
 ## Changes need for production
 The file `kubernetes_config/fluentd-daemonset.yaml` contains the configuration for the fluentd logshipper. See the comments in this files for changes in production.
 
