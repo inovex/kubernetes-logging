@@ -32,8 +32,11 @@ spec:
         - name: varlog
           mountPath: /var/log/
           readOnly: true
-        - name: varlibdockercontainers
+        - name: varlogcontainers
           mountPath: /var/log/containers
+          readOnly: true
+        - name: varlibdocker
+          mountPath: /var/lib/docker/
           readOnly: true
         - name: fluentdposfiles
           mountPath: /var/lib/fluentd
@@ -50,9 +53,12 @@ spec:
       - name: varlog
         hostPath:
           path: /var/log/
-      - name: varlibdockercontainers
+      - name: varlogcontainers
         hostPath:
           path: /var/log/containers
+      - name: varlibdocker
+        hostPath:
+          path: /var/lib/docker/
       - name: fluentdposfiles
         hostPath:
           path: /tmp/fluentd
